@@ -1,17 +1,11 @@
-interface ErrorDetail {
-  type: string;
-  field: string;
-  description: string;
-  location: string;
-}
-
 export class HTTPError extends Error {
-  public statusCode: number;
-  public details?: ErrorDetail[];
+    public readonly statusCode: number;
+    public readonly details?: any[];
 
-  constructor(statusCode: number, reason: string, details?: ErrorDetail[]) {
-    super(reason);
-    this.statusCode = statusCode;
-    this.details = details;
-  }
+    constructor(message: string, statusCode: number = 400, details?: any[]) {
+        super(message);
+        this.statusCode = statusCode;
+        this.details = details;
+        this.name = "HTTPError";
+    }
 }
