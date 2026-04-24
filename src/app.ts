@@ -12,8 +12,8 @@ class App {
     this.port = port;
 
     this.initializeMiddlewares();
-    this.initializeSwagger();
     this.initializeControllers(routers);
+    this.initializeSwagger();
   }
 
   private initializeMiddlewares() {
@@ -22,7 +22,8 @@ class App {
   }
 
   private initializeSwagger() {
-    this.app.use("/", swaggerUi.serve, swaggerUi.setup(generateSwaggerSpec()));
+    this.app.use(swaggerUi.serve);
+    this.app.get("/", swaggerUi.setup(generateSwaggerSpec()));
   }
 
   private initializeControllers(routers: express.Router[]) {
