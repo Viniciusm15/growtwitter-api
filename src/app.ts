@@ -1,5 +1,7 @@
 import cors from "cors";
 import express from "express";
+import swaggerUi from "swagger-ui-express";
+import { generateSwaggerSpec } from "./swagger";
 
 class App {
   public app: express.Application;
@@ -10,12 +12,17 @@ class App {
     this.port = port;
 
     this.initializeMiddlewares();
+    this.initializeSwagger();
     this.initializeControllers(routers);
   }
 
   private initializeMiddlewares() {
     this.app.use(express.json());
     this.app.use(cors());
+  }
+
+  private initializeSwagger() {
+    this.app.use("/", swaggerUi.serve, swaggerUi.setup(generateSwaggerSpec()));
   }
 
   private initializeControllers(routers: express.Router[]) {
@@ -26,7 +33,6 @@ class App {
 
   public listen() {
     this.app.listen(this.port, () => {
-      // eslint-disable-next-line no-console
       console.log(`App listening on the port ${this.port}`);
     });
   }
