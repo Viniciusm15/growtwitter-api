@@ -2,6 +2,8 @@ import cors from "cors";
 import express from "express";
 import swaggerUi from "swagger-ui-express";
 import { generateSwaggerSpec } from "./swagger";
+import { Request, Response, NextFunction } from "express";
+import { onError } from "./utils/api.response";
 
 class App {
   public app: express.Application;
@@ -14,6 +16,7 @@ class App {
     this.initializeMiddlewares();
     this.initializeControllers(routers);
     this.initializeSwagger();
+    this.initializeErrorHandler();
   }
 
   private initializeMiddlewares() {
@@ -24,6 +27,12 @@ class App {
   private initializeSwagger() {
     this.app.use(swaggerUi.serve);
     this.app.get("/", swaggerUi.setup(generateSwaggerSpec()));
+  }
+
+  private initializeErrorHandler() {
+    this.app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+      onError(err, res);
+    });
   }
 
   private initializeControllers(routers: express.Router[]) {
