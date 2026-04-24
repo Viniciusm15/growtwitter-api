@@ -7,16 +7,61 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-// Define your data models here
-model Example {
-    id            Int      @id @default(autoincrement())
-    fieldString   String   @map("field_string")
-    fieldNumber   Int      @map("field_number")
-    fieldBoolean  Boolean  @map("field_boolean")
-    fieldDate     DateTime @map("field_date")
-    fieldArray    String[] @map("field_array")
-    fieldObject   Json     @map("field_object")
-    fieldOptional String?  @map("field_optional")
-    createdAt     DateTime @default(now()) @map("created_at")
-    updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
+// ═══════════════════ USERS ═══════════════════
+model User {
+    id        Int      @id @default(autoincrement())
+    name      String
+    email     String   @unique
+    password  String
+    avatar    String?
+    tweets    Tweet[]
+    likes     Like[]
+    followers Follow[] @relation("Follower")
+    following Follow[] @relation("Following")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("users")
+}
+
+// ═══════════════════ TWEETS ═══════════════════
+model Tweet {
+    id        Int      @id @default(autoincrement())
+    content   String
+    userId    Int
+    parentId  Int?
+    user      User     @relation(fields: [userId], references: [id])
+    parent    Tweet?   @relation("Replies", fields: [parentId], references: [id])
+    replies   Tweet[]  @relation("Replies")
+    likes     Like[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("tweets")
+}
+
+// ═══════════════════ LIKES ═══════════════════
+model Like {
+    id        Int      @id @default(autoincrement())
+    userId    Int
+    tweetId   Int
+    user      User     @relation(fields: [userId], references: [id])
+    tweet     Tweet    @relation(fields: [tweetId], references: [id])
+    createdAt DateTime @default(now())
+
+    @@unique([userId, tweetId])
+    @@map("likes")
+}
+
+// ═══════════════════ FOLLOWS ═══════════════════
+model Follow {
+    id          Int      @id @default(autoincrement())
+    followerId  Int
+    followingId Int
+    follower    User     @relation("Follower", fields: [followerId], references: [id])
+    following   User     @relation("Following", fields: [followingId], references: [id])
+    createdAt   DateTime @default(now())
+
+    @@unique([followerId, followingId])
+    @@map("follows")
 }
