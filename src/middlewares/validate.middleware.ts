@@ -7,7 +7,7 @@ export function validateBody(schema: ZodSchema) {
         const result = schema.safeParse(req.body);
 
         if (!result.success) {
-            const details = result.error.errors.map((e) => e.message);
+            const details = result.error.issues.map((e) => e.message);
             return next(new HTTPError("Validation error.", 400, details));
         }
 
