@@ -1,14 +1,9 @@
 import App from "./app";
 import { envs } from "./envs";
-import {
-  ExampleRoutes
-} from "./routes";
+import { router } from "./routes";
 
 const app = new App(
-  [
-    ExampleRoutes.bind(),
-    // Add more routes here
-  ],
+  [router],
   envs.PORT,
 );
 
