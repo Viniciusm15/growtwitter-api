@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import { JwtUtil } from '../utils/jwt';
+import { Request, Response, NextFunction } from "express";
+import { JwtUtil } from "../utils/jwt";
 
 export interface AuthRequest extends Request {
     userId?: number;

@@ -1,6 +1,6 @@
 import { UserRepository } from "../database/user.repository";
-import { BcryptUtil } from '../utils/bcrypt';
-import { JwtUtil } from '../utils/jwt';
+import { BcryptUtil } from "../utils/bcrypt";
+import { JwtUtil } from "../utils/jwt";
 import { HTTPError } from "../utils/http.error";
 import { CreateUserDTO, LoginDTO, LoginResponseDTO, UserResponseDTO } from "../dtos/user.dto";
 

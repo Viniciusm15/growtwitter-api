@@ -1,5 +1,5 @@
-import jwt, { SignOptions } from 'jsonwebtoken';
-import { envs } from '../envs';
+import jwt, { SignOptions } from "jsonwebtoken";
+import { envs } from "../envs";
 
 export class JwtUtil {
     static generateToken(payload: object): string {
