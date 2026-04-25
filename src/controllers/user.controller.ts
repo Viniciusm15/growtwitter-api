@@ -4,16 +4,16 @@ import { CreateUserDTO, LoginDTO } from "../dtos/user.dto";
 import { onSuccess, onError } from "../utils/api.response";
 
 export class UserController {
-    private service: UserService;
+    private userService: UserService;
 
     constructor() {
-        this.service = new UserService();
+        this.userService = new UserService();
     }
 
     async create(req: Request, res: Response): Promise<Response> {
         try {
             const dto: CreateUserDTO = req.body;
-            const user = await this.service.create(dto);
+            const user = await this.userService.create(dto);
             return onSuccess(res, "User created successfully.", user, 201);
         } catch (error) {
             return onError(error, res);
@@ -23,7 +23,7 @@ export class UserController {
     async findById(req: Request, res: Response): Promise<Response> {
         try {
             const id = Number(req.params.id);
-            const user = await this.service.findById(id);
+            const user = await this.userService.findById(id);
             return onSuccess(res, "User found.", user);
         } catch (error) {
             return onError(error, res);
@@ -33,7 +33,7 @@ export class UserController {
     async login(req: Request, res: Response): Promise<Response> {
         try {
             const dto: LoginDTO = req.body;
-            const result = await this.service.login(dto);
+            const result = await this.userService.login(dto);
             return onSuccess(res, "Login successful.", result);
         } catch (error) {
             return onError(error, res);

@@ -5,14 +5,14 @@ import { HTTPError } from "../utils/http.error";
 import { CreateUserDTO, LoginDTO, LoginResponseDTO, UserResponseDTO } from "../dtos/user.dto";
 
 export class UserService {
-    private repository: UserRepository;
+    private userRepository: UserRepository;
 
     constructor() {
-        this.repository = new UserRepository();
+        this.userRepository = new UserRepository();
     }
 
     async create(data: CreateUserDTO): Promise<UserResponseDTO> {
-        const emailExists = await this.repository.findByEmail(data.email);
+        const emailExists = await this.userRepository.findByEmail(data.email);
 
         if (emailExists) {
             throw new HTTPError("Email already in use.", 409);
@@ -20,7 +20,7 @@ export class UserService {
 
         const hashedPassword = await BcryptUtil.hash(data.password);
 
-        const user = await this.repository.create({
+        const user = await this.userRepository.create({
             name: data.name,
             email: data.email,
             password: hashedPassword,
@@ -31,7 +31,7 @@ export class UserService {
     }
 
     async findById(id: number): Promise<UserResponseDTO> {
-        const user = await this.repository.findById(id);
+        const user = await this.userRepository.findById(id);
 
         if (!user) {
             throw new HTTPError("User not found.", 404);
@@ -41,7 +41,7 @@ export class UserService {
     }
 
     async login(data: LoginDTO): Promise<LoginResponseDTO> {
-        const result = await this.repository.findByEmailWithPassword(data.email);
+        const result = await this.userRepository.findByEmailWithPassword(data.email);
 
         if (!result) {
             throw new HTTPError("Invalid credentials.", 401);
