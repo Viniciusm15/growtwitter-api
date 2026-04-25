@@ -4,7 +4,7 @@ import { envs } from "../envs";
 export class JwtUtil {
     static generateToken(payload: object): string {
         const options: SignOptions = {
-            expiresIn: (envs.JWT_EXPIRES_IN ?? '24h') as SignOptions['expiresIn'],
+            expiresIn: (envs.JWT_EXPIRES_IN ?? '1h') as SignOptions['expiresIn'],
         };
         return jwt.sign(payload, envs.JWT_SECRET, options);
     }
