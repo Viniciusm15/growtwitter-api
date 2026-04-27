@@ -1,143 +1,302 @@
-# API Node.js Template
+# 🐦 Growtwitter API
 
-Este é um template para criar APIs RESTful em Node.js utilizando Express, TypeScript, Prisma ORM e PostgreSQL. O projeto está configurado para rodar em containers Docker com autoreload para desenvolvimento.
+API REST desenvolvida como projeto final do curso **Web Full Stack II (Growdev)**.
 
-## Descrição
+Simula uma rede social estilo Twitter (X), permitindo que usuários interajam através de tweets, replies, curtidas e seguidores.
 
-O template inclui uma estrutura básica para uma API Node.js com:
-- **Express**: Framework web para Node.js.
-- **TypeScript**: Superset do JavaScript com tipagem estática.
-- **Prisma**: ORM para interação com o banco de dados PostgreSQL.
-- **Docker**: Containerização para facilitar o desenvolvimento e deploy.
-- **Autoload**: Recarregamento automático do servidor durante o desenvolvimento.
+---
 
-## Pré-requisitos
+## 📌 Índice
 
-Antes de começar, certifique-se de ter instalado:
-- [Node.js](https://nodejs.org/) (versão 18 ou superior)
-- [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/)
-- [Git](https://git-scm.com/)
+- [Sobre o Projeto](#sobre-o-projeto)
+- [Tecnologias](#tecnologias)
+- [Arquitetura](#arquitetura)
+- [Modelos de Dados](#modelos-de-dados)
+- [Regras de Negócio](#regras-de-negócio)
+- [Variáveis de Ambiente](#variáveis-de-ambiente)
+- [Instalação e Execução](#instalação-e-execução)
+- [Autenticação](#autenticação)
+- [Rotas da API](#rotas-da-api)
+- [Respostas de Erro](#respostas-de-erro)
+- [Deploy](#deploy)
+- [Autor](#autor)
 
-## Como Usar Este Template
+---
 
-Este repositório é um template no GitHub. Para usá-lo:
+## 📖 Sobre o Projeto
 
-1. Clique no botão **"Use this template"** no topo da página do repositório no GitHub.
-2. Escolha um nome para o seu novo repositório e clique em **"Create repository from template"**.
-3. Clone o repositório criado para sua máquina local:
-   ```bash
-   git clone https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
-   cd SEU_REPOSITORIO
-   ```
+O **Growtwitter** é uma API REST que simula as principais funcionalidades de uma rede social. Os usuários podem se cadastrar, publicar tweets, responder tweets de outros usuários, curtir publicações e seguir outros perfis. O feed exibe os tweets do próprio usuário somados aos tweets de quem ele segue.
 
-4. Configure as variáveis de ambiente (veja a seção de configuração abaixo).
+---
 
-## Configuração
+## 🚀 Tecnologias
 
-1. Crie um arquivo `.env` na raiz do projeto com base no arquivo `.env-example`:
-   ```env
-   PORT=3030
-   POSTGRES_USER=seu_usuario
-   POSTGRES_PASSWORD=sua_senha
-   POSTGRES_DB=seu_banco
-   DATABASE_URL="postgresql://seu_usuario:sua_senha@localhost:5432/seu_banco?schema=public"
-   ```
+| Tecnologia | Descrição |
+|---|---|
+| Node.js + TypeScript | Runtime e linguagem |
+| Express | Framework HTTP |
+| Prisma ORM | Acesso ao banco de dados |
+| PostgreSQL | Banco de dados relacional |
+| JWT (jsonwebtoken) | Autenticação e autorização |
+| bcrypt | Hash de senhas |
+| zod | Validação de dados |
+| zod-to-openapi | Integração validação + Swagger |
+| Swagger (swagger-ui-express) | Documentação da API |
+| Docker + Docker Compose | Containerização |
 
-2. Ajuste as configurações no `prisma/schema.prisma` conforme necessário para o seu banco de dados.
+---
 
-## Instalação e Execução
+## 🏗️ Arquitetura e Design Patterns
 
-### Com Docker (Recomendado)
-
-1. Certifique-se de que o Docker e Docker Compose estão instalados e rodando.
-
-2. Execute o comando para construir e iniciar os containers:
-   ```bash
-   docker compose up --build
-   ```
-
-3. A API estará disponível em `http://localhost:3030`.
-
-4. O Prisma Studio (interface gráfica para o banco) estará disponível em `http://localhost:5555`.
-
-5. Para parar os containers:
-   ```bash
-   docker compose down
-   ```
-
-**Nota**: Com Docker, o autoreload está ativado. Qualquer mudança nos arquivos será automaticamente refletida no container.
-
-### Sem Docker (Desenvolvimento Local)
-
-1. Instale as dependências:
-   ```bash
-   npm install
-   ```
-
-2. Configure o banco de dados PostgreSQL localmente ou use um serviço como ElephantSQL.
-
-3. Execute as migrações do Prisma:
-   ```bash
-   npx prisma migrate dev
-   ```
-
-4. Gere o cliente Prisma:
-   ```bash
-   npx prisma generate
-   ```
-
-5. Inicie o servidor em modo de desenvolvimento:
-   ```bash
-   npm run dev
-   ```
-
-6. A API estará disponível em `http://localhost:3030`.
-
-## Estrutura do Projeto
-
-```
-├── src/
-│   ├── controllers/     # Controladores da API
-│   ├── database/        # Configurações do banco de dados
-│   ├── dtos/            # Data Transfer Objects
-│   ├── envs/            # Configurações de ambiente
-│   ├── middlewares/     # Middlewares personalizados
-│   ├── models/          # Modelos de dados
-│   ├── routes/          # Definições de rotas
-│   ├── services/        # Lógica de negócio
-│   ├── utils/           # Utilitários
-│   ├── app.ts           # Configuração do Express
-│   └── server.ts        # Ponto de entrada da aplicação
-├── prisma/
-│   ├── schema.prisma    # Esquema do banco de dados
-│   └── migrations/      # Migrações do Prisma
-├── Dockerfile           # Configuração do container da aplicação
-├── docker-compose.yml   # Configuração dos serviços Docker
-├── package.json         # Dependências e scripts
-├── tsconfig.json        # Configuração do TypeScript
-└── readme.md            # Este arquivo
+```bash
+src/
+ ┣ assets/        # Imagens do projeto
+ ┣ controllers/   # Recebe requisições HTTP e chama os services
+ ┣ database/      # Acesso ao banco (Repository Pattern / Prisma)
+ ┣ dtos/          # Contratos de entrada e saída de dados
+ ┣ envs/          # Configuração de variáveis de ambiente
+ ┣ middlewares/   # Interceptadores (auth JWT, validação)
+ ┣ models/        # Entidades de domínio
+ ┣ routes/        # Definição das rotas da API
+ ┣ services/      # Regras de negócio da aplicação
+ ┣ utils/         # Funções utilitárias (JWT, bcrypt, errors)
+ ┣ validators/    # Validação de dados com Zod
+ ┣ app.ts         # Configuração do Express
+ ┣ express.d.ts   # Extensões de tipos do Express
+ ┣ server.ts      # Inicialização do servidor
+ ┗ swagger.ts     # Configuração da documentação Swagger
 ```
 
-## Scripts Disponíveis
+**Patterns utilizados:**
 
-- `npm run dev`: Inicia o servidor em modo de desenvolvimento com autoreload.
-- `npm run build`: Compila o TypeScript para JavaScript.
-- `npm run start`: Inicia o servidor em produção (após build).
+- **Layered Architecture** — Separação clara entre controllers, services e database.
+- **Repository Pattern** — Implementado em `database/`, abstraindo o acesso ao banco com Prisma.
+- **Service Layer** — Lógica de negócio centralizada nos services, sem regras nos controllers.
+- **Middleware Pattern** — Autenticação JWT e validação de dados de forma reutilizável.
 
-## Tecnologias Utilizadas
+![Arquitetura da API REST](./src/assets/Growtwitter_Arquitetura_API.png)
 
-- **Node.js**: Runtime JavaScript.
-- **Express**: Framework web.
-- **TypeScript**: Linguagem de programação.
-- **Prisma**: ORM para banco de dados.
-- **PostgreSQL**: Banco de dados relacional.
-- **Docker**: Containerização.
-- **ts-node-dev**: Ferramenta para desenvolvimento com TypeScript e autoreload.
+---
 
-## Contribuição
+## 🗂️ Modelos de Dados
+ 
+![Diagrama Entidade-Relacionamento](./src/assets/Growtwitter_ER_Diagram_drawio.png)
+ 
+### Usuário
+ 
+| Campo | Tipo | Descrição |
+|---|---|---|
+| id | INT | Identificador único (autoincrement) |
+| name | VARCHAR | Nome do usuário |
+| email | VARCHAR | E-mail (único) |
+| password | VARCHAR | Senha (hash bcrypt) |
+| avatar | VARCHAR? | URL da imagem de perfil (nullable) |
+| createdAt | TIMESTAMP | Data de criação |
+| updatedAt | TIMESTAMP | Data de atualização |
+ 
+### Tweet
+ 
+| Campo | Tipo | Descrição |
+|---|---|---|
+| id | INT | Identificador único (autoincrement) |
+| content | TEXT | Conteúdo do tweet |
+| userId | INT FK | Referência ao usuário autor |
+| parentId | INT? FK | Referência ao tweet pai (quando reply, nullable) |
+| createdAt | TIMESTAMP | Data de criação |
+| updatedAt | TIMESTAMP | Data de atualização |
+ 
+### Like
+ 
+| Campo | Tipo | Descrição |
+|---|---|---|
+| id | INT | Identificador único (autoincrement) |
+| userId | INT FK | Referência ao usuário |
+| tweetId | INT FK | Referência ao tweet curtido |
+| createdAt | TIMESTAMP | Data de criação |
+ 
+### Follow
+ 
+| Campo | Tipo | Descrição |
+|---|---|---|
+| id | INT | Identificador único (autoincrement) |
+| followerId | INT FK | Usuário que segue |
+| followingId | INT FK | Usuário que é seguido |
+| createdAt | TIMESTAMP | Data de criação |
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests.
+---
 
-## Licença
+## 🔒 Regras de Negócio
+ 
+- Autenticação via email e senha com token JWT
+- Um usuário autenticado pode criar tweets na sua conta
+- Um usuário pode curtir qualquer tweet, inclusive os próprios
+- Um tweet pode ter zero ou múltiplos replies
+- Um reply é um tweet vinculado a outro tweet
+- Um usuário autenticado pode seguir outros usuários
+- Um usuário **não pode seguir a si mesmo**
+- O feed exibe os tweets do próprio usuário + tweets de quem ele segue
 
-Este projeto está sob a licença ISC.
+---
+
+## ⚙️ Variáveis de Ambiente
+
+Crie um arquivo `.env` na raiz do projeto com base no `.env.example`:
+
+```env
+# Porta da aplicação
+PORT=3030
+
+# Banco de dados (Docker)
+DATABASE_URL="postgresql://admin:senha123@db:5432/meu_banco?schema=public"
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=senha123
+POSTGRES_DB=meu_banco
+
+# JWT
+JWT_SECRET=sua_chave_secreta_aqui
+JWT_EXPIRES_IN=24h
+```
+
+---
+
+## 🐳 Instalação e Execução
+
+### Com Docker (recomendado)
+
+Pré-requisitos: [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/)
+
+```bash
+# 1. Clone o repositório
+git clone https://github.com/Viniciusm15/growtwitter-api.git
+cd growtwitter-api
+
+# 2. Copie o arquivo de variáveis de ambiente
+cp .env.example .env
+
+# 3. Suba os containers (API + banco de dados)
+docker compose up --build
+
+# 4. Em outro terminal, execute as migrations
+docker compose exec app npx prisma migrate dev
+
+# 5. (Opcional) Abra o Prisma Studio para visualizar o banco
+docker compose exec app npx prisma studio
+```
+
+A API estará disponível em `http://localhost:3030`.
+O Prisma Studio estará disponível em `http://localhost:5555`.
+
+---
+
+### Sem Docker (local)
+
+Pré-requisitos: Node.js 18+ e PostgreSQL rodando localmente.
+
+```bash
+# 1. Clone o repositório
+git clone https://github.com/Viniciusm15/growtwitter-api.git
+cd growtwitter-api
+
+# 2. Copie e ajuste o arquivo de variáveis de ambiente
+# Edite DATABASE_URL para apontar para seu PostgreSQL local
+cp .env.example .env
+
+# 3. Instale as dependências
+npm install
+
+# 4. Execute as migrations
+npx prisma migrate dev
+
+# 5. Inicie o servidor
+npm run dev
+```
+
+---
+
+## 🔐 Autenticação
+
+A API utiliza **JWT (JSON Web Token)**:
+
+1. Cadastre-se: `POST /users`
+2. Faça login: `POST /auth/login` — retorna um token
+3. Envie o token no header de todas as rotas protegidas:
+
+```
+Authorization: Bearer <token>
+```
+
+---
+
+## 📋 Rotas da API
+ 
+> ✅ Requer autenticação &nbsp;&nbsp; ❌ Pública
+ 
+### Usuários
+ 
+| Método | Rota | Descrição | Auth | Status |
+|---|---|---|---|---|
+| POST | `/users` | Cadastrar novo usuário | ❌ | 201, 400, 409 |
+| GET | `/users/:id` | Buscar usuário com tweets e seguidores | ✅ | 200, 401, 404 |
+| POST | `/login` | Login com email e senha | ❌ | 200, 401 |
+ 
+### Tweets
+ 
+| Método | Rota | Descrição | Auth | Status |
+|---|---|---|---|---|
+| POST | `/tweets` | Criar tweet | ✅ | 201, 400, 401, 404 |
+| POST | `/tweets/reply` | Responder a um tweet | ✅ | 201, 400, 401, 404 |
+| GET | `/feed` | Tweets próprios + tweets de quem segue | ✅ | 200, 401 |
+ 
+### Likes
+ 
+| Método | Rota | Descrição | Auth | Status |
+|---|---|---|---|---|
+| POST | `/likes/:tweetId` | Curtir um tweet | ✅ | 201, 401, 404, 409 |
+| DELETE | `/likes/:tweetId` | Descurtir um tweet | ✅ | 200, 401, 404 |
+ 
+### Seguidores
+ 
+| Método | Rota | Descrição | Auth | Status |
+|---|---|---|---|---|
+| POST | `/follow/:userId` | Seguir um usuário | ✅ | 201, 400, 401, 404, 409 |
+| DELETE | `/follow/:userId` | Deixar de seguir um usuário | ✅ | 200, 400, 401, 404 |
+ 
+---
+
+## 📦 Padrão de Resposta da API
+
+✅ Sucesso
+```json
+{
+  "success": true,
+  "message": "Operação realizada com sucesso",
+  "data": { }
+}
+```
+
+❌ Erro
+```json
+{
+  "success": false,
+  "message": "Descrição do erro"
+}
+```
+
+> ℹ️ O campo `data` representa os dados retornados pela API.
+
+---
+
+## 🧪 Documentação Swagger
+
+Com a API rodando, acesse a documentação interativa em:
+
+```
+http://localhost:3030
+```
+
+---
+
+## ☁️ Deploy
+
+- **API:** [link do deploy no Render/Vercel]
+- **Repositório:** [https://github.com/Viniciusm15/growtwitter-api](https://github.com/Viniciusm15/growtwitter-api)
