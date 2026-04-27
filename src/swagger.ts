@@ -127,6 +127,38 @@ export function generateSwaggerSpec() {
         },
     });
 
+    // Follows
+    registry.registerPath({
+        method: "post",
+        path: "/follow/{userId}",
+        tags: ["Follows"],
+        summary: "Follow a user",
+        security: [{ bearerAuth: [] }],
+        request: { params: z.object({ userId: z.string() }) },
+        responses: {
+            201: { description: "User followed successfully." },
+            400: { description: "You cannot follow yourself." },
+            401: { description: "Unauthorized - Token required." },
+            404: { description: "User not found." },
+            409: { description: "Already following this user." },
+        },
+    });
+
+    registry.registerPath({
+        method: "delete",
+        path: "/follow/{userId}",
+        tags: ["Follows"],
+        summary: "Unfollow a user",
+        security: [{ bearerAuth: [] }],
+        request: { params: z.object({ userId: z.string() }) },
+        responses: {
+            200: { description: "User unfollowed successfully." },
+            400: { description: "You cannot unfollow yourself." },
+            401: { description: "Unauthorized - Token required." },
+            404: { description: "User not found. / Follow not found." },
+        },
+    });
+
     const generator = new OpenApiGeneratorV3(registry.definitions);
     return generator.generateDocument({
         openapi: "3.0.0",
