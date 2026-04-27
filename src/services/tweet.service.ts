@@ -1,23 +1,19 @@
 import { TweetRepository } from "../database/tweet.repository";
-import { UserRepository } from "../database/user.repository";
+import { UserService } from "./user.service";
 import { HTTPError } from "../utils/http.error";
 import { CreateTweetDTO, ReplyTweetDTO, TweetResponseDTO } from "../dtos/tweet.dto";
 
 export class TweetService {
     private tweetRepository: TweetRepository;
-    private userRepository: UserRepository;
+    private userService: UserService;
 
     constructor() {
         this.tweetRepository = new TweetRepository();
-        this.userRepository = new UserRepository();
+        this.userService = new UserService();
     }
 
     async create(userId: number, data: CreateTweetDTO): Promise<TweetResponseDTO> {
-        const user = await this.userRepository.findById(userId);
-
-        if (!user) {
-            throw new HTTPError("User not found.", 404);
-        }
+        await this.userService.findById(userId);
 
         const tweet = await this.tweetRepository.create({
             content: data.content,
@@ -28,11 +24,7 @@ export class TweetService {
     }
 
     async reply(userId: number, data: ReplyTweetDTO): Promise<TweetResponseDTO> {
-        const user = await this.userRepository.findById(userId);
-
-        if (!user) {
-            throw new HTTPError("User not found.", 404);
-        }
+        await this.userService.findById(userId);
 
         const parentTweet = await this.tweetRepository.findById(data.parentId);
 
