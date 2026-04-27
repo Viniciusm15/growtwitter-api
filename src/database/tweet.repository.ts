@@ -19,16 +19,22 @@ export class TweetRepository {
     }
 
     async findFeed(userId: number): Promise<Tweet[]> {
+        const follows = await prisma.follow.findMany({
+            where: { followerId: userId },
+            select: { followingId: true }
+        });
+
+        const followingIds = follows.map((f: { followingId: number }) => f.followingId);
+        const userIds = [userId, ...followingIds];
+
         const tweets = await prisma.tweet.findMany({
             where: {
-                OR: [
-                    { userId },
-                    { user: { followers: { some: { followerId: userId } } } },
-                ],
+                userId: { in: userIds }
             },
-            orderBy: { createdAt: "desc" },
+            orderBy: { createdAt: "desc" }
         });
-        return tweets.map((t: NonNullable<TweetEntity>) => this.mapToModel(t));
+
+        return tweets.map((t: TweetEntity) => this.mapToModel(t as NonNullable<TweetEntity>));
     }
 
     private mapToModel(entity: NonNullable<TweetEntity>): Tweet {
