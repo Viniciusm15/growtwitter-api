@@ -25,12 +25,7 @@ export class TweetService {
 
     async reply(userId: number, data: ReplyTweetDTO): Promise<TweetResponseDTO> {
         await this.userService.findById(userId);
-
-        const parentTweet = await this.tweetRepository.findById(data.parentId);
-
-        if (!parentTweet) {
-            throw new HTTPError("Parent tweet not found.", 404);
-        }
+        await this.findById(data.parentId);
 
         const tweet = await this.tweetRepository.create({
             content: data.content,
@@ -44,5 +39,15 @@ export class TweetService {
     async getFeed(userId: number): Promise<TweetResponseDTO[]> {
         const tweets = await this.tweetRepository.findFeed(userId);
         return tweets.map((t) => t.toJSON());
+    }
+
+    async findById(id: number): Promise<TweetResponseDTO> {
+        const tweet = await this.tweetRepository.findById(id);
+
+        if (!tweet) {
+            throw new HTTPError("Tweet not found.", 404);
+        }
+
+        return tweet.toJSON();
     }
 }
