@@ -10,18 +10,18 @@ Simula uma rede social estilo Twitter (X), permitindo que usuários interajam at
 
 ## 📌 Índice
  
-- [Sobre o Projeto](#sobre-o-projeto)
-- [Tecnologias](#tecnologias)
-- [Arquitetura e Design Patterns](#arquitetura-e-design-patterns)
-- [Modelos de Dados](#modelos-de-dados)
-- [Regras de Negócio](#regras-de-negócio)
-- [Variáveis de Ambiente](#variáveis-de-ambiente)
-- [Instalação e Execução](#instalação-e-execução)
-- [Autenticação](#autenticação)
-- [Rotas da API](#rotas-da-api)
-- [Padrão de Resposta da API](#padrão-de-resposta-da-api)
-- [Documentação Swagger](#documentação-swagger)
-- [Melhorias Futuras](#melhorias-futuras)
+- [Sobre o Projeto](#-sobre-o-projeto)
+- [Tecnologias](#-tecnologias)
+- [Arquitetura e Design Patterns](#%EF%B8%8F-arquitetura-e-design-patterns)
+- [Modelos de Dados](#%EF%B8%8F-modelos-de-dados)
+- [Regras de Negócio](#-regras-de-negócio)
+- [Variáveis de Ambiente](#%EF%B8%8F-vari%C3%A1veis-de-ambiente)
+- [Instalação e Execução](#-instalação-e-execução)
+- [Autenticação](#-autenticação)
+- [Rotas da API](#-rotas-da-api)
+- [Padrão de Resposta da API](#-padrão-de-resposta-da-api)
+- [Documentação Swagger](#-documentação-swagger)
+- [Melhorias Futuras](#-melhorias-futuras)
 
 ---
 
