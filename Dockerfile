@@ -10,7 +10,8 @@ COPY . .
 
 RUN npx prisma generate
 
-# NÃO É OBRIGATÓRIO - APENAS DOC
-## EXPOSE 3000 
+RUN npm run build
 
-CMD ["npm", "run", "dev"]
+EXPOSE 3030
+
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]
