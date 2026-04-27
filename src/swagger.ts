@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { OpenApiGeneratorV3, OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { createUserSchema, loginSchema } from "./validators/user.validator";
+import { createTweetSchema, replyTweetSchema } from "./validators/tweet.validator";
 
 export function generateSwaggerSpec() {
     const registry = new OpenAPIRegistry();
@@ -11,6 +12,7 @@ export function generateSwaggerSpec() {
         bearerFormat: "JWT",
     });
 
+    // Users
     registry.registerPath({
         method: "post",
         path: "/users",
@@ -49,6 +51,49 @@ export function generateSwaggerSpec() {
         responses: {
             200: { description: "Login successful." },
             401: { description: "Invalid credentials." }
+        },
+    });
+
+    // Tweets
+    registry.registerPath({
+        method: "post",
+        path: "/tweets",
+        tags: ["Tweets"],
+        summary: "Create a new tweet",
+        security: [{ bearerAuth: [] }],
+        request: { body: { content: { "application/json": { schema: createTweetSchema } } } },
+        responses: {
+            201: { description: "Tweet created successfully." },
+            400: { description: "Validation error." },
+            401: { description: "Unauthorized - Token required." },
+            404: { description: "User not found." }
+        },
+    });
+
+    registry.registerPath({
+        method: "post",
+        path: "/tweets/reply",
+        tags: ["Tweets"],
+        summary: "Reply to a tweet",
+        security: [{ bearerAuth: [] }],
+        request: { body: { content: { "application/json": { schema: replyTweetSchema } } } },
+        responses: {
+            201: { description: "Reply created successfully." },
+            400: { description: "Validation error." },
+            401: { description: "Unauthorized - Token required." },
+            404: { description: "User not found. / Parent tweet not found." },
+        },
+    });
+
+    registry.registerPath({
+        method: "get",
+        path: "/feed",
+        tags: ["Tweets"],
+        summary: "Get authenticated user feed",
+        security: [{ bearerAuth: [] }],
+        responses: {
+            200: { description: "Feed retrieved successfully." },
+            401: { description: "Unauthorized - Token required." },
         },
     });
 
