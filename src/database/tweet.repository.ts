@@ -28,13 +28,22 @@ export class TweetRepository {
         const userIds = [userId, ...followingIds];
 
         const tweets = await prisma.tweet.findMany({
-            where: {
-                userId: { in: userIds }
-            },
-            orderBy: { createdAt: "desc" }
+            where: { userId: { in: userIds } },
+            orderBy: { createdAt: "asc" }
         });
 
-        return tweets.map((t: TweetEntity) => this.mapToModel(t as NonNullable<TweetEntity>));
+        const roots = tweets.filter(t => t.parentId === null);
+        const children = tweets.filter(t => t.parentId !== null);
+
+        const ordered: typeof tweets = [];
+        for (const root of roots) {
+            ordered.push(root);
+            ordered.push(...children.filter(c => c.parentId === root.id));
+        }
+
+        ordered.reverse();
+
+        return ordered.map((t: TweetEntity) => this.mapToModel(t as NonNullable<TweetEntity>));
     }
 
     private mapToModel(entity: NonNullable<TweetEntity>): Tweet {
