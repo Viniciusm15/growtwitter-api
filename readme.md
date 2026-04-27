@@ -4,22 +4,24 @@ API REST desenvolvida como projeto final do curso **Web Full Stack II (Growdev)*
 
 Simula uma rede social estilo Twitter (X), permitindo que usuários interajam através de tweets, replies, curtidas e seguidores.
 
+🚀 **API em produção:** [https://growtwitter-api-zg6s.onrender.com](https://growtwitter-api-zg6s.onrender.com)
+
 ---
 
 ## 📌 Índice
-
+ 
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Tecnologias](#tecnologias)
-- [Arquitetura](#arquitetura)
+- [Arquitetura e Design Patterns](#arquitetura-e-design-patterns)
 - [Modelos de Dados](#modelos-de-dados)
 - [Regras de Negócio](#regras-de-negócio)
 - [Variáveis de Ambiente](#variáveis-de-ambiente)
 - [Instalação e Execução](#instalação-e-execução)
 - [Autenticação](#autenticação)
 - [Rotas da API](#rotas-da-api)
-- [Respostas de Erro](#respostas-de-erro)
-- [Deploy](#deploy)
-- [Autor](#autor)
+- [Padrão de Resposta da API](#padrão-de-resposta-da-api)
+- [Documentação Swagger](#documentação-swagger)
+- [Melhorias Futuras](#melhorias-futuras)
 
 ---
 
@@ -296,7 +298,8 @@ http://localhost:3030
 
 ---
 
-## ☁️ Deploy
+## 🔮 Melhorias Futuras
 
-- **API:** [link do deploy no Render/Vercel]
-- **Repositório:** [https://github.com/Viniciusm15/growtwitter-api](https://github.com/Viniciusm15/growtwitter-api)
+- [ ] Paginação no feed
+- [ ] Upload de imagem de perfil
+- [ ] Testes automatizados
