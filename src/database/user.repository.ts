@@ -4,9 +4,11 @@ import { Tweet } from "../models/tweet.model";
 import { Follow } from "../models/follow.model";
 
 type UserBase = Awaited<ReturnType<typeof prisma.user.findUnique>>;
-type UserWithRelations = NonNullable<Awaited<ReturnType<typeof prisma.user.findUnique<{
-    include: { tweets: true; followers: true; following: true }
-}>>>>;
+type UserWithRelations = NonNullable<UserBase> & {
+    tweets: { id: number; content: string; userId: number; parentId: number | null; createdAt: Date; updatedAt: Date }[];
+    following: { id: number; followerId: number; followingId: number; createdAt: Date }[];
+    followers: { id: number; followerId: number; followingId: number; createdAt: Date }[];
+};
 
 export class UserRepository {
     async create(data: { name: string; email: string; password: string; avatar?: string | null }): Promise<User> {
@@ -43,6 +45,8 @@ export class UserRepository {
         const toFollow = (f: { id: number; followerId: number; followingId: number; createdAt: Date }) =>
             new Follow(f.id, f.followerId, f.followingId, f.createdAt);
 
+        const withRelations = entity as UserWithRelations;
+
         return new User(
             entity.id,
             entity.name,
@@ -50,9 +54,9 @@ export class UserRepository {
             entity.avatar,
             entity.createdAt,
             entity.updatedAt,
-            "tweets" in entity ? entity.tweets.map(toTweet) : [],
-            "following" in entity ? entity.following.map(toFollow) : [],
-            "followers" in entity ? entity.followers.map(toFollow) : []
+            "tweets" in entity ? withRelations.tweets.map(toTweet) : [],
+            "following" in entity ? withRelations.following.map(toFollow) : [],
+            "followers" in entity ? withRelations.followers.map(toFollow) : []
         );
     }
 }
