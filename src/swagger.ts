@@ -97,6 +97,36 @@ export function generateSwaggerSpec() {
         },
     });
 
+    // Likes
+    registry.registerPath({
+        method: "post",
+        path: "/likes/{tweetId}",
+        tags: ["Likes"],
+        summary: "Like a tweet",
+        security: [{ bearerAuth: [] }],
+        request: { params: z.object({ tweetId: z.string() }) },
+        responses: {
+            201: { description: "Tweet liked successfully." },
+            401: { description: "Unauthorized - Token required." },
+            404: { description: "User not found. / Tweet not found." },
+            409: { description: "Tweet already liked." },
+        },
+    });
+
+    registry.registerPath({
+        method: "delete",
+        path: "/likes/{tweetId}",
+        tags: ["Likes"],
+        summary: "Unlike a tweet",
+        security: [{ bearerAuth: [] }],
+        request: { params: z.object({ tweetId: z.string() }) },
+        responses: {
+            200: { description: "Tweet unliked successfully." },
+            401: { description: "Unauthorized - Token required." },
+            404: { description: "User not found. / Tweet not found. / Like not found." },
+        },
+    });
+
     const generator = new OpenApiGeneratorV3(registry.definitions);
     return generator.generateDocument({
         openapi: "3.0.0",
