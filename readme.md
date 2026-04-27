@@ -80,7 +80,7 @@ src/
 
 ## 🗂️ Modelos de Dados
  
-![Diagrama Entidade-Relacionamento](./src/assets/Growtwitter_ER_Diagram_drawio.png)
+![Diagrama Entidade-Relacionamento](./src/assets/Growtwitter_ER_Diagram.png)
  
 ### Usuário
  
