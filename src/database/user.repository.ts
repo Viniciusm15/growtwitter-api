@@ -1,7 +1,12 @@
 import { prisma } from "../database/prisma.repository";
 import { User } from "../models/user.model";
+import { Tweet } from "../models/tweet.model";
+import { Follow } from "../models/follow.model";
 
-type UserEntity = Awaited<ReturnType<typeof prisma.user.findUnique>>;
+type UserBase = Awaited<ReturnType<typeof prisma.user.findUnique>>;
+type UserWithRelations = NonNullable<Awaited<ReturnType<typeof prisma.user.findUnique<{
+    include: { tweets: true; followers: true; following: true }
+}>>>>;
 
 export class UserRepository {
     async create(data: { name: string; email: string; password: string; avatar?: string | null }): Promise<User> {
@@ -15,7 +20,14 @@ export class UserRepository {
     }
 
     async findById(id: number): Promise<User | null> {
-        const user = await prisma.user.findUnique({ where: { id } });
+        const user = await prisma.user.findUnique({
+            where: { id },
+            include: {
+                tweets: { orderBy: { createdAt: "desc" } },
+                followers: true,
+                following: true,
+            },
+        });
         return user ? this.mapToModel(user) : null;
     }
 
@@ -24,14 +36,23 @@ export class UserRepository {
         return entity ? { user: this.mapToModel(entity), password: entity.password } : null;
     }
 
-    private mapToModel(entity: NonNullable<UserEntity>): User {
+    private mapToModel(entity: NonNullable<UserBase> | UserWithRelations): User {
+        const toTweet = (t: { id: number; content: string; userId: number; parentId: number | null; createdAt: Date; updatedAt: Date }) =>
+            new Tweet(t.id, t.content, t.userId, t.parentId, t.createdAt, t.updatedAt);
+
+        const toFollow = (f: { id: number; followerId: number; followingId: number; createdAt: Date }) =>
+            new Follow(f.id, f.followerId, f.followingId, f.createdAt);
+
         return new User(
             entity.id,
             entity.name,
             entity.email,
             entity.avatar,
             entity.createdAt,
-            entity.updatedAt
+            entity.updatedAt,
+            "tweets" in entity ? entity.tweets.map(toTweet) : [],
+            "following" in entity ? entity.following.map(toFollow) : [],
+            "followers" in entity ? entity.followers.map(toFollow) : []
         );
     }
 }

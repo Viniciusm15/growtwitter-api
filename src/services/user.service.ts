@@ -2,7 +2,7 @@ import { UserRepository } from "../database/user.repository";
 import { BcryptUtil } from "../utils/bcrypt";
 import { JwtUtil } from "../utils/jwt";
 import { HTTPError } from "../utils/http.error";
-import { CreateUserDTO, LoginDTO, LoginResponseDTO, UserResponseDTO } from "../dtos/user.dto";
+import { CreateUserDTO, LoginDTO, LoginResponseDTO, UserResponseDTO, UserFullResponseDTO } from "../dtos/user.dto";
 
 export class UserService {
     private userRepository: UserRepository;
@@ -37,7 +37,7 @@ export class UserService {
             throw new HTTPError("User not found.", 404);
         }
 
-        return user.toJSON();
+        return user.toFullJSON();
     }
 
     async login(data: LoginDTO): Promise<LoginResponseDTO> {
