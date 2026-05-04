@@ -25,7 +25,11 @@ export class TweetService {
 
     async reply(userId: number, data: ReplyTweetDTO): Promise<TweetResponseDTO> {
         await this.userService.findById(userId);
-        await this.findById(data.parentId);
+        const parentTweet = await this.findById(data.parentId);
+
+        if (parentTweet.parentId !== null) {
+            throw new HTTPError("You cannot reply to a reply.", 400);
+        }
 
         const tweet = await this.tweetRepository.create({
             content: data.content,
