@@ -9,6 +9,6 @@ const userController = new UserController();
 
 userRoutes.post('/users', validateBody(createUserSchema), userController.create.bind(userController));
 userRoutes.get('/users/:id', authMiddleware, userController.findById.bind(userController));
-userRoutes.post('/login', validateBody(loginSchema), userController.login.bind(userController));
+userRoutes.post('/users/login', validateBody(loginSchema), userController.login.bind(userController));
 
 export { userRoutes };

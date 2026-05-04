@@ -220,7 +220,7 @@ npm run dev
 A API utiliza **JWT (JSON Web Token)**:
 
 1. Cadastre-se: `POST /users`
-2. Faça login: `POST /auth/login` — retorna um token
+2. Faça login: `POST /users/login` — retorna um token
 3. Envie o token no header de todas as rotas protegidas:
 
 ```
@@ -239,7 +239,7 @@ Authorization: Bearer <token>
 |---|---|---|---|---|
 | POST | `/users` | Cadastrar novo usuário | ❌ | 201, 400, 409 |
 | GET | `/users/:id` | Buscar usuário com tweets e seguidores | ✅ | 200, 401, 404 |
-| POST | `/login` | Login com email e senha | ❌ | 200, 401 |
+| POST | `/users/login` | Login com email e senha | ❌ | 200, 401 |
  
 ### Tweets
  
@@ -247,7 +247,7 @@ Authorization: Bearer <token>
 |---|---|---|---|---|
 | POST | `/tweets` | Criar tweet | ✅ | 201, 400, 401, 404 |
 | POST | `/tweets/reply` | Responder a um tweet | ✅ | 201, 400, 401, 404 |
-| GET | `/feed` | Tweets próprios + tweets de quem segue | ✅ | 200, 401 |
+| GET | `/tweets/feed` | Tweets próprios + tweets de quem segue | ✅ | 200, 401 |
  
 ### Likes
  

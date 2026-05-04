@@ -9,6 +9,6 @@ const tweetController = new TweetController();
 
 tweetRoutes.post('/tweets', authMiddleware, validateBody(createTweetSchema), tweetController.create.bind(tweetController));
 tweetRoutes.post('/tweets/reply', authMiddleware, validateBody(replyTweetSchema), tweetController.reply.bind(tweetController));
-tweetRoutes.get('/feed', authMiddleware, tweetController.getFeed.bind(tweetController));
+tweetRoutes.get('/tweets/feed', authMiddleware, tweetController.getFeed.bind(tweetController));
 
 export { tweetRoutes };

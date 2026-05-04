@@ -43,7 +43,7 @@ export function generateSwaggerSpec() {
 
     registry.registerPath({
         method: "post",
-        path: "/login",
+        path: "/users/login",
         tags: ["Users"],
         summary: "Login",
         security: [],
@@ -87,7 +87,7 @@ export function generateSwaggerSpec() {
 
     registry.registerPath({
         method: "get",
-        path: "/feed",
+        path: "/tweets/feed",
         tags: ["Tweets"],
         summary: "Get authenticated user feed",
         security: [{ bearerAuth: [] }],
