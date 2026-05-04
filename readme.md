@@ -81,11 +81,15 @@ src/
 ---
 
 ## 🗂️ Modelos de Dados
- 
+
+O banco de dados é composto por 4 entidades principais. O diagrama abaixo ilustra os relacionamentos entre elas:
+
 ![Diagrama Entidade-Relacionamento](./src/assets/Growtwitter_ER_Diagram.png)
- 
+
 ### User
- 
+
+Representa um usuário cadastrado na plataforma.
+
 | Campo | Tipo | Descrição |
 |---|---|---|
 | id | INT | Identificador único (autoincrement) |
@@ -95,48 +99,41 @@ src/
 | avatar | STRING? | URL da imagem de perfil (nullable) |
 | createdAt | DATETIME | Data de criação |
 | updatedAt | DATETIME | Data de atualização |
- 
+
 ### Tweet
- 
+
+Representa um tweet ou reply. Quando `parentId` está preenchido, o tweet é uma resposta a outro tweet.
+
 | Campo | Tipo | Descrição |
 |---|---|---|
 | id | INT | Identificador único (autoincrement) |
 | content | STRING | Conteúdo do tweet |
 | userId | INT FK | Referência ao usuário autor |
-| parentId | INT? FK | Referência ao tweet pai (quando reply, nullable) |
+| parentId | INT? FK | Referência ao tweet pai (nullable) |
 | createdAt | DATETIME | Data de criação |
 | updatedAt | DATETIME | Data de atualização |
- 
+
 ### Like
- 
+
+Representa a curtida de um usuário em um tweet.
+
 | Campo | Tipo | Descrição |
 |---|---|---|
 | id | INT | Identificador único (autoincrement) |
 | userId | INT FK | Referência ao usuário |
 | tweetId | INT FK | Referência ao tweet curtido |
 | createdAt | DATETIME | Data de criação |
- 
+
 ### Follow
- 
+
+Representa o relacionamento de seguir entre dois usuários.
+
 | Campo | Tipo | Descrição |
 |---|---|---|
 | id | INT | Identificador único (autoincrement) |
 | followerId | INT FK | Usuário que segue |
 | followingId | INT FK | Usuário que é seguido |
 | createdAt | DATETIME | Data de criação |
-
----
-
-## 🔒 Regras de Negócio
- 
-- Autenticação via email e senha com token JWT
-- Um usuário autenticado pode criar tweets na sua conta
-- Um usuário pode curtir qualquer tweet, inclusive os próprios
-- Um tweet pode ter zero ou múltiplos replies
-- Um reply é um tweet vinculado a outro tweet
-- Um usuário autenticado pode seguir outros usuários
-- Um usuário **não pode seguir a si mesmo**
-- O feed exibe os tweets do próprio usuário + tweets de quem ele segue
 
 ---
 
