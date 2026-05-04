@@ -309,11 +309,12 @@ Com a API rodando, acesse a documentação interativa em:
 
 ## 🔮 Melhorias Futuras
 
-- [ ] Paginação no feed
-- [ ] Upload de imagem de perfil
-- [ ] Testes automatizados
-- [ ] Deletar tweet
-- [ ] Editar tweet
-- [ ] Listar likes de um tweet
-- [ ] Logout (invalidar token)
-- [ ] Deletar conta
+- Paginação no feed
+- Upload de imagem de perfil
+- Testes automatizados
+- Deletar tweet
+- Editar tweet
+- Listar seguidores e seguidos de um usuário
+- Listar likes de um tweet
+- Logout (invalidar token)
+- Deletar conta
