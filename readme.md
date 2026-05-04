@@ -270,8 +270,8 @@ Authorization: Bearer <token>
  
 | Método | Rota | Descrição | Auth | Status |
 |---|---|---|---|---|
-| POST | `/follow/:userId` | Seguir um usuário | ✅ | 201, 400, 401, 404, 409 |
-| DELETE | `/follow/:userId` | Deixar de seguir um usuário | ✅ | 200, 400, 401, 404 |
+| POST | `/follows/:userId` | Seguir um usuário | ✅ | 201, 400, 401, 404, 409 |
+| DELETE | `/follows/:userId` | Deixar de seguir um usuário | ✅ | 200, 400, 401, 404 |
  
 ---
 
@@ -302,9 +302,8 @@ Authorization: Bearer <token>
 
 Com a API rodando, acesse a documentação interativa em:
 
-```
-http://localhost:3030
-```
+- Local: [http://localhost:3030](http://localhost:3030)
+- Produção: [https://growtwitter-api-zg6s.onrender.com](https://growtwitter-api-zg6s.onrender.com)
 
 ---
 

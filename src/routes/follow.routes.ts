@@ -5,7 +5,7 @@ import { authMiddleware } from "../middlewares/auth.middleware";
 const followRoutes = Router();
 const followController = new FollowController();
 
-followRoutes.post('/follow/:userId', authMiddleware, followController.follow.bind(followController));
-followRoutes.delete('/follow/:userId', authMiddleware, followController.unfollow.bind(followController));
+followRoutes.post('/follows/:userId', authMiddleware, followController.follow.bind(followController));
+followRoutes.delete('/follows/:userId', authMiddleware, followController.unfollow.bind(followController));
 
 export { followRoutes };

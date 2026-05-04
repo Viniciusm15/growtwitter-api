@@ -130,7 +130,7 @@ export function generateSwaggerSpec() {
     // Follows
     registry.registerPath({
         method: "post",
-        path: "/follow/{userId}",
+        path: "/follows/{userId}",
         tags: ["Follows"],
         summary: "Follow a user",
         security: [{ bearerAuth: [] }],
@@ -146,7 +146,7 @@ export function generateSwaggerSpec() {
 
     registry.registerPath({
         method: "delete",
-        path: "/follow/{userId}",
+        path: "/follows/{userId}",
         tags: ["Follows"],
         summary: "Unfollow a user",
         security: [{ bearerAuth: [] }],
