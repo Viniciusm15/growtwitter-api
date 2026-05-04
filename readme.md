@@ -137,6 +137,19 @@ Representa o relacionamento de seguir entre dois usuários.
 
 ---
 
+## 🔒 Regras de Negócio
+ 
+- Autenticação via email e senha com token JWT
+- Um usuário autenticado pode criar tweets na sua conta
+- Um usuário pode curtir qualquer tweet, inclusive os próprios
+- Um tweet pode ter zero ou múltiplos replies
+- Um reply é um tweet vinculado a outro tweet
+- Um usuário autenticado pode seguir outros usuários
+- Um usuário **não pode seguir a si mesmo**
+- O feed exibe os tweets do próprio usuário + tweets de quem ele segue
+
+---
+
 ## ⚙️ Variáveis de Ambiente
 
 Crie um arquivo `.env` na raiz do projeto com base no `.env.example`:
