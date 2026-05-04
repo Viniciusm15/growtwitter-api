@@ -89,23 +89,23 @@ src/
 | Campo | Tipo | Descrição |
 |---|---|---|
 | id | INT | Identificador único (autoincrement) |
-| name | VARCHAR | Nome do usuário |
-| email | VARCHAR | E-mail (único) |
-| password | VARCHAR | Senha (hash bcrypt) |
-| avatar | VARCHAR? | URL da imagem de perfil (nullable) |
-| createdAt | TIMESTAMP | Data de criação |
-| updatedAt | TIMESTAMP | Data de atualização |
+| name | STRING | Nome do usuário |
+| email | STRING | E-mail (único) |
+| password | STRING | Senha (hash bcrypt) |
+| avatar | STRING? | URL da imagem de perfil (nullable) |
+| createdAt | DATETIME | Data de criação |
+| updatedAt | DATETIME | Data de atualização |
  
 ### Tweet
  
 | Campo | Tipo | Descrição |
 |---|---|---|
 | id | INT | Identificador único (autoincrement) |
-| content | TEXT | Conteúdo do tweet |
+| content | STRING | Conteúdo do tweet |
 | userId | INT FK | Referência ao usuário autor |
 | parentId | INT? FK | Referência ao tweet pai (quando reply, nullable) |
-| createdAt | TIMESTAMP | Data de criação |
-| updatedAt | TIMESTAMP | Data de atualização |
+| createdAt | DATETIME | Data de criação |
+| updatedAt | DATETIME | Data de atualização |
  
 ### Like
  
@@ -114,7 +114,7 @@ src/
 | id | INT | Identificador único (autoincrement) |
 | userId | INT FK | Referência ao usuário |
 | tweetId | INT FK | Referência ao tweet curtido |
-| createdAt | TIMESTAMP | Data de criação |
+| createdAt | DATETIME | Data de criação |
  
 ### Follow
  
@@ -123,7 +123,7 @@ src/
 | id | INT | Identificador único (autoincrement) |
 | followerId | INT FK | Usuário que segue |
 | followingId | INT FK | Usuário que é seguido |
-| createdAt | TIMESTAMP | Data de criação |
+| createdAt | DATETIME | Data de criação |
 
 ---
 
