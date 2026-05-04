@@ -84,7 +84,7 @@ src/
  
 ![Diagrama Entidade-Relacionamento](./src/assets/Growtwitter_ER_Diagram.png)
  
-### Usuário
+### User
  
 | Campo | Tipo | Descrição |
 |---|---|---|
