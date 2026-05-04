@@ -243,7 +243,7 @@ Authorization: Bearer <token>
  
 > ✅ Requer autenticação &nbsp;&nbsp; ❌ Pública
  
-### Usuários
+### Users
  
 | Método | Rota | Descrição | Auth | Status |
 |---|---|---|---|---|
@@ -266,7 +266,7 @@ Authorization: Bearer <token>
 | POST | `/likes/:tweetId` | Curtir um tweet | ✅ | 201, 401, 404, 409 |
 | DELETE | `/likes/:tweetId` | Descurtir um tweet | ✅ | 200, 401, 404 |
  
-### Seguidores
+### Follows
  
 | Método | Rota | Descrição | Auth | Status |
 |---|---|---|---|---|
