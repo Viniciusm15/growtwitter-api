@@ -2,7 +2,7 @@ import { UserRepository } from "../database/user.repository";
 import { BcryptUtil } from "../utils/bcrypt";
 import { JwtUtil } from "../utils/jwt";
 import { HTTPError } from "../utils/http.error";
-import { CreateUserDTO, LoginDTO, LoginResponseDTO, UserResponseDTO, UserFullResponseDTO } from "../dtos/user.dto";
+import { CreateUserDTO, LoginDTO, LoginResponseDTO, UserResponseDTO } from "../dtos/user.dto";
 
 export class UserService {
     private userRepository: UserRepository;
