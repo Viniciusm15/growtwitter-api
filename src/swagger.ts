@@ -50,6 +50,7 @@ export function generateSwaggerSpec() {
         request: { body: { content: { "application/json": { schema: loginSchema } } } },
         responses: {
             200: { description: "Login successful." },
+            400: { description: "Validation error." },
             401: { description: "Invalid credentials." }
         },
     });
