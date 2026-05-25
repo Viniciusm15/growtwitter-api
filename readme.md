@@ -250,7 +250,7 @@ Authorization: Bearer <token>
 |---|---|---|---|---|
 | POST | `/users` | Cadastrar novo usuário | ❌ | 201, 400, 409 |
 | GET | `/users/:id` | Buscar usuário com tweets e seguidores | ✅ | 200, 401, 404 |
-| POST | `/users/login` | Login com email e senha | ❌ | 200, 401 |
+| POST | `/users/login` | Login com email e senha | ❌ | 200, 400, 401 |
  
 ### Tweets
  
