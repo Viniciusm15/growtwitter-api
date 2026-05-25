@@ -21,6 +21,7 @@ Simula uma rede social estilo Twitter (X), permitindo que usuários interajam at
 - [Rotas da API](#-rotas-da-api)
 - [Padrão de Resposta da API](#-padrão-de-resposta-da-api)
 - [Documentação Swagger](#-documentação-swagger)
+- [Testes via Swagger](#-testes-via-swagger)
 - [Melhorias Futuras](#-melhorias-futuras)
 
 ---
@@ -305,6 +306,179 @@ Com a API rodando, acesse a documentação interativa em:
 - Local: [http://localhost:3030](http://localhost:3030)
 - Produção: [https://growtwitter-api-zg6s.onrender.com](https://growtwitter-api-zg6s.onrender.com)
 
+---
+
+## 🧪 Testes via Swagger
+ 
+Roteiro de testes cobrindo todos os endpoints e regras de negócio, realizados diretamente pela interface do Swagger.
+
+---
+
+### Passo a Passo
+ 
+**1. Cadastrar usuários** — `POST /users`
+ 
+Usuário 1:
+```json
+{
+  "name": "Vinicius",
+  "email": "vinicius@growtwitter.com",
+  "password": "123456",
+  "avatar": "https://placehold.co/400x400?text=VI&font=roboto"
+}
+```
+ 
+Usuário 2:
+```json
+{
+  "name": "Growdev",
+  "email": "growdev@growtwitter.com",
+  "password": "123456",
+  "avatar": "https://placehold.co/400x400?text=GD&font=roboto"
+}
+```
+ 
+Resultado esperado: `201` para ambos.
+ 
+---
+ 
+**2. Login dos usuários** — `POST /users/login`
+ 
+Fazer login com Vinicius e Growdev separadamente. Guardar os tokens retornados e colá-los no botão **Authorize** do Swagger antes de testar as rotas protegidas.
+ 
+Resultado esperado: `200` com token JWT para cada usuário.
+ 
+---
+ 
+**3. Buscar usuário por ID (autenticado)** — `GET /users/:id`
+ 
+Buscar o Vinicius pelo `id` retornado no cadastro. Validar que retorna nome, email, tweets e seguidores.
+ 
+Resultado esperado: `200` com dados completos.
+ 
+---
+ 
+**4. Buscar usuário por ID sem token** — `GET /users/:id`
+ 
+Realizar a mesma busca sem passar o token no Authorize.
+ 
+Resultado esperado: `401` — acesso não autorizado.
+ 
+---
+ 
+**5. Criar tweet como Growdev** — `POST /tweets`
+ 
+```json
+{ "content": "Primeiro post da Growdev no Growtwitter!" }
+```
+ 
+Anotar o `id` do tweet retornado para os próximos passos.
+ 
+Resultado esperado: `201`.
+ 
+---
+ 
+**6. Growdev dá like no próprio tweet** — `POST /likes/:tweetId`
+ 
+Usar o `id` do tweet criado no passo 5. Curtir o próprio tweet é permitido.
+ 
+Resultado esperado: `201`.
+ 
+---
+ 
+**7. Growdev dá unlike no próprio tweet** — `DELETE /likes/:tweetId`
+ 
+Usar o mesmo `id` do tweet do passo 5.
+ 
+Resultado esperado: `200`.
+ 
+---
+ 
+**8. Vinicius cria um reply no tweet do Growdev** — `POST /tweets/reply`
+ 
+```json
+{ "content": "Que post incrível, Growdev!", "parentId": <id do tweet do passo 5> }
+```
+ 
+Resultado esperado: `201` com `parentId` preenchido.
+ 
+---
+ 
+**9. Vinicius dá like no tweet do Growdev** — `POST /likes/:tweetId`
+ 
+Usar o `id` do tweet do Growdev (passo 5).
+ 
+Resultado esperado: `201`.
+ 
+---
+ 
+**10. Vinicius tenta dar like novamente no mesmo tweet** — `POST /likes/:tweetId`
+ 
+Usar o mesmo `id` do tweet do passo 5. Não é permitido curtir duas vezes o mesmo tweet.
+ 
+Resultado esperado: `409` — conflito.
+ 
+---
+ 
+**11. Vinicius segue o Growdev** — `POST /follows/:userId`
+ 
+Usar o `id` do Growdev.
+ 
+Resultado esperado: `201`.
+ 
+---
+ 
+**12. Vinicius tenta se seguir** — `POST /follows/:userId`
+ 
+Usar o próprio `id` do Vinicius como parâmetro. Um usuário não pode seguir a si mesmo.
+ 
+Resultado esperado: `400`.
+ 
+---
+ 
+**13. Vinicius tenta seguir o Growdev novamente** — `POST /follows/:userId`
+ 
+Usar novamente o `id` do Growdev. Não é permitido seguir o mesmo usuário duas vezes.
+ 
+Resultado esperado: `409` — conflito.
+ 
+---
+ 
+**14. Vinicius busca o feed** — `GET /tweets/feed`
+ 
+O feed deve trazer os tweets do Vinicius + tweets do Growdev (que ele segue).
+ 
+Resultado esperado: `200` com tweets de ambos os usuários.
+ 
+---
+ 
+**15. Vinicius para de seguir o Growdev** — `DELETE /follows/:userId`
+ 
+Usar o `id` do Growdev.
+ 
+Resultado esperado: `200`.
+ 
+---
+ 
+**16. Vinicius busca o feed novamente** — `GET /tweets/feed`
+ 
+Após deixar de seguir o Growdev, os tweets dele não devem mais aparecer.
+ 
+Resultado esperado: `200` com apenas os tweets do Vinicius.
+ 
+---
+ 
+### Resumo das Regras de Negócio Testadas
+ 
+| # | Regra | Endpoint testado | Resultado esperado |
+|---|---|---|---|
+| 4 | Rota protegida exige token | `GET /users/:id` sem token | 401 |
+| 6 | Pode curtir o próprio tweet | `POST /likes/:tweetId` (Growdev) | 201 |
+| 10 | Não pode curtir duas vezes | `POST /likes/:tweetId` duplicado (Vinicius) | 409 |
+| 12 | Usuário não pode seguir a si mesmo | `POST /follows/:ownId` (Vinicius) | 400 |
+| 13 | Não pode seguir o mesmo usuário 2x | `POST /follows/:userId` duplicado (Vinicius) | 409 |
+| 14 | Feed inclui tweets de quem segue | `GET /tweets/feed` após seguir Growdev | 200 |
+ 
 ---
 
 ## 🔮 Melhorias Futuras
